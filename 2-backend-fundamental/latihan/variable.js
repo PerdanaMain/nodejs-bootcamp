@@ -1,14 +1,15 @@
-// --------------------------------------------
-//              Deklarasi variabel
-// --------------------------------------------
+// Program konversi nilai sederhana
+let nilai = 80;
 
-let age = 25;
-const name = "John Doe";
+console.log(
+  "Apakah variabel nilai merupakan string? ",
+  typeof nilai == "string" ?? "Tidak"
+);
+console.log("Variabel nilai merupakan sebuah tipe data: ", typeof nilai);
+console.log(
+  "Variabel nilai merupakan angka ",
+  nilai % 2 == 0 ? "Genap" : "Ganjil"
+);
 
-console.log(age);
-console.log(name);
-
-// key let dan const merupakan cara baru dalam mendeklarasikan variabel di JavaScript.
-
-// let digunakan untuk mendeklarasikan variabel yang nilainya dapat diubah.
-// const digunakan untuk mendeklarasikan variabel yang nilainya tetap.
+console.log("Jika nilai ditambah 5 maka: ", nilai + 5);
+console.log("Jika nilai dibagi 5 maka: ", nilai / 5);

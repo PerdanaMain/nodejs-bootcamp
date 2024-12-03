@@ -1,0 +1,14 @@
+{
+  "name": "typescript-hello-world",
+  "version": "1.0.0",
+  "description": "Simple TypeScript Hello World project",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node dist/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -14,7 +14,7 @@ async function init() {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use("/api", routes);
+    app.use("/api/v1/", routes);
 
     app.listen(PORT, () => {
       console.log(`Server is running at http://localhost:${PORT}`);

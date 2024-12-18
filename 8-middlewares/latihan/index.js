@@ -1,41 +1,55 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const cors = require("cors");
+const multer = require("multer");
 const app = express();
 const port = 3000;
 
-// Middleware untuk memeriksa header autentikasi
-const checkAuth = (req, res, next) => {
-  if (req.headers.authorization === "mysecrettoken") {
-    next();
-  } else {
-    res.status(403).json({ message: "Forbidden" });
-  }
-};
+app.use(bodyParser.json());
+app.use(cors());
 
-// Middleware untuk logging
-const logger = (req, res, next) => {
-  console.log(`${req.method} request for '${req.url}'`);
-  next();
-};
+const upload = multer({ dest: "uploads/" });
 
+let products = [
+  { id: 1, name: "Laptop", price: 1000, image: "" },
+  { id: 2, name: "Phone", price: 500, image: "" },
+];
 const prefix = "/api/v1";
 
-app.use(logger);
-app.use(bodyParser.json()); // Mengurai application/json
-app.use(bodyParser.urlencoded({ extended: true })); // Mengurai application/x-www-form-urlencoded
-// app.use(checkAuth);
-
-app.get(prefix + "/public", (req, res) => {
-  res.send("This is a public route");
+// GET semua produk
+app.get(prefix + "/products", (req, res) => {
+  res.json(products);
 });
 
-app.get(prefix + "/private", checkAuth, (req, res) => {
-  res.send("This is a private route");
+// POST produk baru dengan upload gambar
+app.post(prefix + "/products", upload.single("image"), (req, res) => {
+  const newProduct = {
+    id: products.length ? products[products.length - 1].id + 1 : 1,
+    name: req.body.name,
+    price: req.body.price,
+    image: req.file ? req.file.path : "",
+  };
+  products.push(newProduct);
+  res.status(201).json(newProduct);
 });
 
-app.get(prefix + "/", (req, res) => {
-  res.send("Hello, World!");
+// PUT update produk
+app.put(prefix + "/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+  const productIndex = products.findIndex((p) => p.id === productId);
+  if (productIndex !== -1) {
+    products[productIndex] = { id: productId, ...req.body };
+    res.json(products[productIndex]);
+  } else {
+    res.status(404).json({ message: "Product not found" });
+  }
+});
+
+// DELETE produk
+app.delete(prefix + "/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+  products = products.filter((p) => p.id !== productId);
+  res.status(204).send();
 });
 
 app.listen(port, () => {

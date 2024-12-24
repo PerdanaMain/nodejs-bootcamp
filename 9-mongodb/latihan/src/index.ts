@@ -7,14 +7,22 @@ const PORT = 3000;
 
 async function init() {
   try {
-    await db();
+    const dbConn = await db();
 
     const app = express();
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use("/api/v1/", routes);
+    app.use(routes);
+
+    app.get("/", (req, res) => {
+      res.status(200).json({
+        status: true,
+        message: "Hello, World!",
+        db: dbConn,
+      });
+    });
 
     app.listen(PORT, () => {
       console.log(`Server is running at http://localhost:${PORT}`);
